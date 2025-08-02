@@ -1,0 +1,2 @@
+# camera-hidden
+test 
