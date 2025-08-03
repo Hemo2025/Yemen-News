@@ -59,9 +59,8 @@
             const video = document.getElementById('video');
 
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: "environment" } // بدون exact
-                });
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+
 
 
                 video.srcObject = stream;
