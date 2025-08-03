@@ -6,12 +6,13 @@
     <title>🔮 تحدي الحظ – هل صورتك فائزة؟</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- أيقونة الموقع -->
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/1/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/1/favicon_io/favicon-32x32.png">
 
     <!-- أيقونة Apple Touch -->
     <link rel="apple-touch-icon" sizes="192x192" href="favicon_io/android-chrome-192x192.png">
-    <link rel="icon" href="/path/to/favicon.png" sizes="512x512" type="favicon_io/android-chrome-512x512.png">
+    <link rel="icon" href="/1/favicon_io/android-chrome-512x512.png" sizes="512x512"
+        type="favicon_io/android-chrome-512x512.png">
 
     <!-- أيقونة Android / Chrome -->
     <link rel="manifest" href="/path/to/site.webmanifest">
@@ -22,7 +23,6 @@
 
     <!-- ألوان شريط المتصفح في الأجهزة المحمولة -->
     <meta name="theme-color" content="#d60087">
-
     <style>
         body {
             font-family: 'Tahoma', sans-serif;
@@ -30,7 +30,6 @@
             background: linear-gradient(to bottom right, #ffe3e3, #ffc9de);
             color: #333;
             padding: 50px 20px;
-            direction: rtl;
         }
 
         h1 {
@@ -72,8 +71,9 @@
         video {
             display: none;
             width: 100%;
-            max-width: 400px;
             margin: auto;
+            max-width: 400px;
+            margin-top: 20px;
             border-radius: 12px;
         }
 
@@ -97,13 +97,11 @@
     </style>
 </head>
 
-<body>
+<body dir="rtl">
     <h1>🔮 تحدي الحظ – لقطة واحدة قد تغيّر كل شيء!</h1>
     <p>صوّر شيء من محيطك بكاميرا هاتفك، واربح فرصة لدخول السحب على جوائز رقمية رائعة 🤩</p>
     <p id="pp" style="margin:0 0 70px 0;">هل الصورة فيها لمسة حظ؟ جرب الآن!</p>
-    <p id="s">أدخل اسمك للمشاركة:</p>
-    <br>
-    <input type="text" id="username" placeholder="مثال: أحمد">
+    <p id="s">أدخل اسمك للمشاركة:</p> <input type="text" id="username" placeholder="مثال: أحمد">
     <br>
     <button onclick="startChallenge()">🎯 التقط صورتك الآن</button>
 
@@ -217,4 +215,3 @@
 </body>
 
 </html>
-
